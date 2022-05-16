@@ -5,6 +5,7 @@ using namespace std;
 class Figure
 {
 public:
+
 	int cordX;
 	int cordY;
 	string nameFigure;
@@ -14,7 +15,6 @@ public:
 		cordY = y;
 		nameFigure = name;
 	}
-
 
 };
 

@@ -2,7 +2,7 @@
 //
 
 #include <iostream>
-#include <Random>
+#include <random>
 #include <ctime>
 #include <windows.h>
 #include <stdlib.h>
@@ -13,9 +13,11 @@
 
 using namespace std;
 
+char key;
+
 char gamePole[40][20];
 
-string listFigure[]{"O", "I", "S", "Z", "L", "J", "T"};
+string listFigure[]{ "O", "I", "S", "Z", "L", "J", "T" };
 
 void windowPole() {//Окно игрового поля
     system("mode con cols=50 lines=50");
@@ -30,12 +32,22 @@ void zGamePole() {
     }
 }
 
-void spawnFig(string name,int X,int Y) {
+Figure randomFigureSpawn() {
+    srand(time(NULL));
+    Figure fig(0, rand() % 20, listFigure[rand() % 7]);
+    return fig;
+}
 
-    HANDLE handle;
+void spawnFig(Figure fig) {
+
+    string name = fig.nameFigure;
+    int X = fig.cordX;
+    int Y = fig.cordY;
+
+    /*HANDLE handle;
     handle = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    srand(time(NULL));
+    srand(time(NULL));*/
 
     if (name == "O") {
         //SetConsoleTextAttribute(handle,rand()%14+1);
@@ -64,15 +76,15 @@ void spawnFig(string name,int X,int Y) {
     if (name == "Z") {
         //SetConsoleTextAttribute(handle, rand() % 14 + 1);
         gamePole[X][Y] = 'Z';
-        gamePole[X][Y-1] = 'Z';
-        gamePole[X+1][Y] = 'Z';
-        gamePole[X+1][Y+1] = 'Z';
+        gamePole[X][Y - 1] = 'Z';
+        gamePole[X + 1][Y] = 'Z';
+        gamePole[X + 1][Y + 1] = 'Z';
         //SetConsoleTextAttribute(handle, 15);
     }
     if (name == "L") {
         //SetConsoleTextAttribute(handle, rand() % 14 + 1);
         gamePole[X][Y] = 'L';
-        gamePole[X+1][Y] = 'L';
+        gamePole[X + 1][Y] = 'L';
         gamePole[X + 2][Y] = 'L';
         gamePole[X + 2][Y + 1] = 'L';
         //SetConsoleTextAttribute(handle, 15);
@@ -89,51 +101,63 @@ void spawnFig(string name,int X,int Y) {
         //SetConsoleTextAttribute(handle, rand() % 14 + 1);
         gamePole[X][Y] = 'T';
         gamePole[X + 1][Y] = 'T';
-        gamePole[X + 1][Y-1] = 'T';
+        gamePole[X + 1][Y - 1] = 'T';
         gamePole[X + 1][Y + 1] = 'T';
         //SetConsoleTextAttribute(handle, 15);
     }
 }
 
-Figure randomFigureSpawn() {
-    srand(time(NULL));
-    Figure fig(0, rand() % 20, listFigure[rand() % 7]);
-    return fig;
-}
-
 bool checkPole() {
-        for (int j = 0; j < 20; j++) {
-            if (gamePole[39][j] == 'O' ||
-                gamePole[39][j] == 'T' ||
-                gamePole[39][j] == 'J' ||
-                gamePole[39][j] == 'L' ||
-                gamePole[39][j] == 'Z' ||
-                gamePole[39][j] == 'S' ||
-                gamePole[39][j] == 'I') {
-                return true;
-                break;
-            }
-        }
-        return false;
-}
-
-void moveFigure() {
-    for (int i = 39; i >= 0; i--) {
-        for (int j = 19; j >= 0; j--) {
-            if (gamePole[i][j] == 'O' ||
-                gamePole[i][j] == 'T' ||
-                gamePole[i][j] == 'J' ||
-                gamePole[i][j] == 'L' ||
-                gamePole[i][j] == 'Z' ||
-                gamePole[i][j] == 'S' ||
-                gamePole[i][j] == 'I') 
-            {
-                gamePole[i + 1][j] = gamePole[i][j];
-                gamePole[i][j] = '.';
-            }
+    for (int j = 0; j < 20; j++) {
+        if (gamePole[39][j] == 'O' ||
+            gamePole[39][j] == 'T' ||
+            gamePole[39][j] == 'J' ||
+            gamePole[39][j] == 'L' ||
+            gamePole[39][j] == 'Z' ||
+            gamePole[39][j] == 'S' ||
+            gamePole[39][j] == 'I') {
+            return true;
+            break;
         }
     }
+    return false;
 }
+
+void moveFigure(Figure fig,string name) {
+    if (name == "base") {
+        fig.cordX++;
+        zGamePole();
+        spawnFig(fig);
+    }
+    if (name == "right") {
+        fig.cordY++;
+        zGamePole();
+        spawnFig(fig);
+    }
+    if (name == "left") {
+        fig.cordY--;
+        zGamePole();
+        spawnFig(fig);
+    }
+}
+
+//void moveFigure() {
+//    for (int i = 39; i >= 0; i--) {
+//        for (int j = 19; j >= 0; j--) {
+//            if (gamePole[i][j] == 'O' ||
+//                gamePole[i][j] == 'T' ||
+//                gamePole[i][j] == 'J' ||
+//                gamePole[i][j] == 'L' ||
+//                gamePole[i][j] == 'Z' ||
+//                gamePole[i][j] == 'S' ||
+//                gamePole[i][j] == 'I') 
+//            {
+//                gamePole[i + 1][j] = gamePole[i][j];
+//                gamePole[i][j] = '.';
+//            }
+//        }
+//    }
+//}
 
 void outGamePole() {
     for (int i = 0; i < 40; i++) {
@@ -141,6 +165,18 @@ void outGamePole() {
             cout << gamePole[i][j];
         }
         cout << '\n';
+    }
+}
+
+void rotateFigure(char key) {
+    if (key == 'a') {
+
+    }
+    if (key == 'd') {
+
+    }
+    if (key == 'w') {
+
     }
 }
 
@@ -154,7 +190,7 @@ int main()
 
     zGamePole();
 
-    spawnFig(figure.nameFigure, figure.cordX, figure.cordY);
+    spawnFig(figure);
     //for (int i = 0; i < 40; i++) {
     //    for (int j = 0; j < 20; j++) {
     //        cout << gamePole[i][j];
@@ -167,26 +203,66 @@ int main()
         }
         cout << '\n';
     }*/
+
     while (true) {
         if (checkPole()) {
             cout << "DONE!";
             break;
         }
         else {
-            moveFigure();
+            //key = _getch();
+            //rotateFigure(key);
+            moveFigure(figure,"base");
             outGamePole();
             this_thread::sleep_for(chrono::milliseconds(1000));
         }
     }
 }
 
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
-
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
+//#include <iostream>
+//#include <String>
+//#include <vector>
+//#include "Figure.h"
+//
+//using namespace std;
+//
+//vector <int> vec;
+//
+//Figure figBuilder(int x, int y, string n) {
+//
+//    Figure fig(x, y, n);
+//    return fig;
+//}
+//
+//void abraCatabra(Figure fig) {
+//    vec.push_back(fig.cordX);
+//    vec.push_back(fig.cordY);
+//}
+//
+//void figEditor(Figure fig) {
+//    fig.cordX++;
+//    fig.cordY--;
+//    abraCatabra(fig);
+//}
+//
+//void print(Figure fig) {
+//    cout << vec[0] << "\n" << vec[1] << "\n" << fig.nameFigure << "\n";
+//}
+//
+//int main()
+//{
+//
+//    Figure fig = figBuilder(5, 0, "OZ");
+//
+//    figEditor(fig);
+//
+//    print(fig);
+//
+//    //Figure figure(1, 2, "oz");
+//    //while (figure.cordX<20||figure.cordY>-20) {
+//    //    figure.cordX++;
+//    //    figure.cordY--;
+//    //    figure.output();
+//    //    cout << "\n";
+//    //}
+//}
