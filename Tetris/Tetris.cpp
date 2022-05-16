@@ -34,7 +34,7 @@ void zGamePole() {
 
 Figure randomFigureSpawn() {
     srand(time(NULL));
-    Figure fig(0, rand() % 20, listFigure[rand() % 7]);
+    Figure fig(0, rand() % 18+1, listFigure[rand() % 7]);
     return fig;
 }
 
@@ -123,7 +123,7 @@ bool checkPole() {
     return false;
 }
 
-void moveFigure(Figure fig,string name) {
+Figure moveFigure(Figure fig,string name) {
     if (name == "base") {
         fig.cordX++;
         zGamePole();
@@ -139,6 +139,7 @@ void moveFigure(Figure fig,string name) {
         zGamePole();
         spawnFig(fig);
     }
+    return fig;
 }
 
 //void moveFigure() {
@@ -212,7 +213,7 @@ int main()
         else {
             //key = _getch();
             //rotateFigure(key);
-            moveFigure(figure,"base");
+            figure=moveFigure(figure,"base");
             outGamePole();
             this_thread::sleep_for(chrono::milliseconds(1000));
         }
