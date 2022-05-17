@@ -13,8 +13,6 @@
 
 using namespace std;
 
-char key;
-
 char gamePole[40][20];
 
 string listFigure[]{ "O", "I", "S", "Z", "L", "J", "T" };
@@ -160,6 +158,21 @@ Figure moveFigure(Figure fig,string name) {
 //    }
 //}
 
+Figure presKey(char k,Figure fig) {
+
+    if (k == 'a') {
+       fig = moveFigure(fig, "left");
+    }
+    if (k == 'd') {
+        fig = moveFigure(fig, "right");
+    }
+    if (k == 'w') {
+
+    }
+
+    return fig;
+}
+
 void outGamePole() {
     for (int i = 0; i < 40; i++) {
         for (int j = 0; j < 20; j++) {
@@ -206,64 +219,23 @@ int main()
     }*/
 
     while (true) {
-        if (checkPole()) {
-            cout << "DONE!";
-            break;
+        char key;
+        while (!_kbhit())
+        {
+            if (checkPole()) {
+                cout << "DONE!";
+                break;
+            }
+            else {
+                figure = moveFigure(figure, "base");
+                outGamePole();
+                this_thread::sleep_for(chrono::milliseconds(1000));
+            }
         }
-        else {
-            //key = _getch();
-            //rotateFigure(key);
-            figure=moveFigure(figure,"base");
-            outGamePole();
-            this_thread::sleep_for(chrono::milliseconds(1000));
-        }
+        
+        key = _getch();
+
+        figure = presKey(key, figure);
+        
     }
 }
-
-//#include <iostream>
-//#include <String>
-//#include <vector>
-//#include "Figure.h"
-//
-//using namespace std;
-//
-//vector <int> vec;
-//
-//Figure figBuilder(int x, int y, string n) {
-//
-//    Figure fig(x, y, n);
-//    return fig;
-//}
-//
-//void abraCatabra(Figure fig) {
-//    vec.push_back(fig.cordX);
-//    vec.push_back(fig.cordY);
-//}
-//
-//void figEditor(Figure fig) {
-//    fig.cordX++;
-//    fig.cordY--;
-//    abraCatabra(fig);
-//}
-//
-//void print(Figure fig) {
-//    cout << vec[0] << "\n" << vec[1] << "\n" << fig.nameFigure << "\n";
-//}
-//
-//int main()
-//{
-//
-//    Figure fig = figBuilder(5, 0, "OZ");
-//
-//    figEditor(fig);
-//
-//    print(fig);
-//
-//    //Figure figure(1, 2, "oz");
-//    //while (figure.cordX<20||figure.cordY>-20) {
-//    //    figure.cordX++;
-//    //    figure.cordY--;
-//    //    figure.output();
-//    //    cout << "\n";
-//    //}
-//}
