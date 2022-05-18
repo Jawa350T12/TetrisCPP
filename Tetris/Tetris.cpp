@@ -121,6 +121,29 @@ bool checkPole() {
     return false;
 }
 
+int checkPoint() {
+
+    int checkCount = 0;
+
+    for (int i = 39; i >= 0; i--) {
+        checkCount = 0;
+        for (int j = 0; j < 20; j++) {
+            if (gamePole[i][j]!='.') {
+                checkCount++;
+            }
+        }
+        if (checkCount == 20) {
+            return i;
+            break;
+        }
+        if (checkCount == 0) {
+            return 50;
+            break;
+        }
+    }
+    return 0;
+}
+
 Figure moveFigure(Figure fig,string name) {
     if (name == "base") {
         fig.cordX++;
@@ -182,16 +205,31 @@ void outGamePole() {
     }
 }
 
+void editPole(int I) {
+    for (int j = 19; j >= 0; j--) {
+        gamePole[checkPoint()][j] = '.';
+    }
+    while (checkPoint() != 50) {
+        for (int i = 39; i >= 0; i--) {
+            for (int j = 19; j >= 0; j--) {
+                if ((gamePole[i][j] == 'O' ||
+                    gamePole[i][j] == 'T' ||
+                    gamePole[i][j] == 'J' ||
+                    gamePole[i][j] == 'L' ||
+                    gamePole[i][j] == 'Z' ||
+                    gamePole[i][j] == 'S' ||
+                    gamePole[i][j] == 'I')&&(i<39)) 
+                {
+                    gamePole[i + 1][j] = gamePole[i][j];
+                    gamePole[i][j] = '.';
+                }
+            }
+        }
+    }
+}
+
 void rotateFigure(char key) {
-    if (key == 'a') {
 
-    }
-    if (key == 'd') {
-
-    }
-    if (key == 'w') {
-
-    }
 }
 
 int main()
@@ -225,6 +263,9 @@ int main()
             if (checkPole()) {
                 cout << "DONE!";
                 break;
+            }
+            else if(checkPoint()>0) {
+                editPole(checkPoint());
             }
             else {
                 figure = moveFigure(figure, "base");
