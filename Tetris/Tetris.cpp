@@ -190,6 +190,7 @@ Figure presKey(char k,Figure fig) {
         fig = moveFigure(fig, "right");
     }
     if (k == 'w') {
+        
 
     }
 
@@ -228,8 +229,100 @@ void editPole(int I) {
     }
 }
 
-void rotateFigure(char key) {
+void rotateFigure(Figure fig,int i) {
 
+    string name = fig.nameFigure;
+    
+    int X = fig.cordX;
+    int Y = fig.cordY;
+
+    if (name == "O") {
+        //SetConsoleTextAttribute(handle,rand()%14+1);
+        gamePole[X][Y] = 'O';
+        gamePole[X][Y + 1] = 'O';
+        gamePole[X + 1][Y] = 'O';
+        gamePole[X + 1][Y + 1] = 'O';
+        //SetConsoleTextAttribute(handle, 15);
+    }
+    if (name == "I") {
+        //SetConsoleTextAttribute(handle, rand() % 14 + 1);
+        gamePole[X][Y] = 'I';
+        gamePole[X][Y+1] = 'I';
+        gamePole[X][Y+2] = 'I';
+        gamePole[X][Y-1] = 'I';
+        //SetConsoleTextAttribute(handle, 15);
+    }
+    if (name == "S") {
+        //SetConsoleTextAttribute(handle, rand() % 14 + 1);
+        gamePole[X][Y] = 'S';
+        gamePole[X+1][Y] = 'S';
+        gamePole[X + 1][Y+1] = 'S';
+        gamePole[X + 2][Y + 1] = 'S';
+        //SetConsoleTextAttribute(handle, 15);
+    }
+    if (name == "Z") {
+        //SetConsoleTextAttribute(handle, rand() % 14 + 1);
+        gamePole[X][Y] = 'Z';
+        gamePole[X+1][Y] = 'Z';
+        gamePole[X + 1][Y-1] = 'Z';
+        gamePole[X + 2][Y - 1] = 'Z';
+        //SetConsoleTextAttribute(handle, 15);
+    }
+    if (name == "L") {
+        //SetConsoleTextAttribute(handle, rand() % 14 + 1);
+        gamePole[X][Y] = 'L';
+        gamePole[X + 1][Y] = 'L';
+        gamePole[X][Y+1] = 'L';
+        gamePole[X][Y + 2] = 'L';
+        
+        //gamePole[X][Y] = 'L';
+        //gamePole[X][Y-1] = 'L';
+        //gamePole[X+1][Y] = 'L';
+        //gamePole[X+2][Y] = 'L';
+
+        //gamePole[X][Y] = 'L';
+        //gamePole[X + 1][Y] = 'L';
+        //gamePole[X][Y - 1] = 'L';
+        //gamePole[X][Y - 2] = 'L';
+        //SetConsoleTextAttribute(handle, 15);
+    }
+    if (name == "J") {
+        //SetConsoleTextAttribute(handle, rand() % 14 + 1);
+        gamePole[X][Y] = 'J';
+        gamePole[X + 1][Y] = 'J';
+        gamePole[X][Y+1] = 'J';
+        gamePole[X][Y + 2] = 'J';
+
+        //gamePole[X][Y] = 'J';
+        //gamePole[X][Y+1] = 'J';
+        //gamePole[X+1][Y] = 'J';
+        //gamePole[X+2][Y] = 'J';
+
+        //gamePole[X][Y] = 'J';
+        //gamePole[X+1][Y] = 'J';
+        //gamePole[X][Y - 1] = 'J';
+        //gamePole[X][Y - 2] = 'J';
+
+        //SetConsoleTextAttribute(handle, 15);
+    }
+    if (name == "T") {
+        //SetConsoleTextAttribute(handle, rand() % 14 + 1);
+        gamePole[X][Y] = 'T';
+        gamePole[X + 1][Y] = 'T';
+        gamePole[X - 1][Y] = 'T';
+        gamePole[X][Y + 1] = 'T';
+
+        //gamePole[X][Y] = 'T';
+        //gamePole[X][Y+1] = 'T';
+        //gamePole[X][Y - 1] = 'T';
+        //gamePole[X + 1][Y] = 'T';
+
+        //gamePole[X][Y] = 'T';
+        //gamePole[X + 1][Y] = 'T';
+        //gamePole[X - 1][Y] = 'T';
+        //gamePole[X][Y - 1] = 'T';
+        //SetConsoleTextAttribute(handle, 15);
+    }
 }
 
 int main()
@@ -264,9 +357,9 @@ int main()
                 cout << "DONE!";
                 break;
             }
-            else if(checkPoint()>0) {
-                editPole(checkPoint());
-            }
+            //else if(checkPoint()>0) {
+            //    editPole(checkPoint());
+            //}
             else {
                 figure = moveFigure(figure, "base");
                 outGamePole();
