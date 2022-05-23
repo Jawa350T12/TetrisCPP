@@ -131,7 +131,7 @@ void spawnFig(Figure fig) {
     }
     if (name == "L" && RP == 3) {
         gamePole[X][Y] = 'L';
-        gamePole[X + 1][Y] = 'L';
+        gamePole[X - 1][Y] = 'L';
         gamePole[X][Y - 1] = 'L';
         gamePole[X][Y - 2] = 'L';
     }
@@ -423,46 +423,47 @@ int main()
     //system("color 02");
 
     windowPole();//Вызов функции окна игрового поля
-
-    Figure figure = randomFigureSpawn();
-
-    zGamePole();
-
-    spawnFig(figure);
-    //for (int i = 0; i < 40; i++) {
-    //    for (int j = 0; j < 20; j++) {
-    //        cout << gamePole[i][j];
-    //    }
-    //    cout << '\n';
-    //}
-    /*for (int i = 0; i < 40; i++) {
-        for (int j = 0; j < 20; j++) {
-            cout << gamePole[i][j];
-        }
-        cout << '\n';
-    }*/
-
     while (true) {
-        char key;
-        while (!_kbhit())
-        {
-            if (checkPole()) {
-                cout << "DONE!";
-                break;
+        Figure figure = randomFigureSpawn();
+
+        zGamePole();
+
+        spawnFig(figure);
+        //for (int i = 0; i < 40; i++) {
+        //    for (int j = 0; j < 20; j++) {
+        //        cout << gamePole[i][j];
+        //    }
+        //    cout << '\n';
+        //}
+        /*for (int i = 0; i < 40; i++) {
+            for (int j = 0; j < 20; j++) {
+                cout << gamePole[i][j];
             }
-            //else if(checkPoint()>0) {
-            //    editPole(checkPoint());
-            //}
-            else {
-                figure = moveFigure(figure, "base");
-                outGamePole();
-                this_thread::sleep_for(chrono::milliseconds(1000));
+            cout << '\n';
+        }*/
+
+        while (true) {
+            char key;
+            while (!_kbhit())
+            {
+                if (checkPole()) {
+                    cout << "DONE!";
+                    break;
+                }
+                //else if(checkPoint()>0) {
+                //    editPole(checkPoint());
+                //}
+                else {
+                    figure = moveFigure(figure, "base");
+                    outGamePole();
+                    this_thread::sleep_for(chrono::milliseconds(1000));
+                }
             }
+
+            key = _getch();
+
+            figure = presKey(key, figure);
+
         }
-        
-        key = _getch();
-
-        figure = presKey(key, figure);
-
     }
 }

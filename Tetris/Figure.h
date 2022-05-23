@@ -8,7 +8,7 @@ public:
 
 	int cordX;
 	int cordY;
-	static int rotatePos;
+	int rotatePos=0;
 	string nameFigure;
 
 	Figure(int x, int y, string name) {
@@ -18,11 +18,11 @@ public:
 	}
 
 	void onePlus() {
-		if (rotatePos >= 4) {
-			rotatePos = 0;
+		if (rotatePos > 3) {
+			this->rotatePos = 0;
 		}
 		else {
-			rotatePos++;
+			this->rotatePos++;
 		}
 	}
 
