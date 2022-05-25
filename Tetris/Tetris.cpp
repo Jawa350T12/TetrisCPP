@@ -222,7 +222,7 @@ void spawnFig(Figure fig) {
 }
 
 void checkcheck() {
-    for (int i = 39; i >= 35; i--) {
+    for (int i = 39; i >= 0; i--) {
         for (int j = 0; j < 20; j++) {
             if (gamePole[i][j] == 'O' ||
                 gamePole[i][j] == 'T' ||
@@ -268,10 +268,13 @@ bool checkPole() {
             gamePole[39][j] == 'I'))
         {
             checkcheck();
-            if (checkPolePoint()) {
-                return true;
-                break;
-            }
+            return true;
+            break;
+        }
+        if (checkPolePoint()) {
+            checkcheck();
+            return true;
+            break;
         }
     }
     return false;
@@ -298,13 +301,13 @@ Figure moveFigure(Figure fig,string name) {
 
 Figure presKey(char k,Figure fig) {
 
-    if (k == 'a') {
+    if (k == 'a'|| k == 'A') {
        fig = moveFigure(fig, "left");
     }
-    if (k == 'd') {
+    if (k == 'd'|| k == 'D') {
         fig = moveFigure(fig, "right");
     }
-    if (k == 'w') {
+    if (k == 'w'|| k == 'W') {
         fig.onePlus();
         zGamePole();
         spawnFig(fig);
