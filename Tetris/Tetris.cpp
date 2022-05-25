@@ -18,6 +18,7 @@ int counterRotate = 0;
 int counterRotatePre = counterRotate;
 
 char gamePole[40][20];
+char gamePoleMemory[40][20];
 
 string listFigure[]{ "O", "I", "S", "Z", "L", "J", "T" };
 
@@ -26,9 +27,39 @@ void windowPole() {//Окно игрового поля
     SetConsoleTitleA("TETRIS");
 }
 
-void zGamePole() {
+bool checkGamePole() {
     for (int i = 0; i < 40; i++) {
         for (int j = 0; j < 20; j++) {
+            if (gamePoleMemory[i][j] == 'O' ||
+                gamePoleMemory[i][j] == 'T' ||
+                gamePoleMemory[i][j] == 'J' ||
+                gamePoleMemory[i][j] == 'L' ||
+                gamePoleMemory[i][j] == 'Z' ||
+                gamePoleMemory[i][j] == 'S' ||
+                gamePoleMemory[i][j] == 'I')
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void zGamePoleMemory() {
+    for (int i = 0; i < 40; i++) {
+        for (int j = 0; j < 20; j++) {
+            gamePoleMemory[i][j] = gamePole[i][j];
+        }
+    }
+}
+
+void zGamePole() {
+
+    for (int i = 0; i < 40; i++) {
+        for (int j = 0; j < 20; j++) {
+            //if (!checkGamePole) {
+            //    gamePole[i][j]='.';
+            //}
             gamePole[i][j] = '.';
         }
     }
@@ -193,17 +224,57 @@ void spawnFig(Figure fig) {
     }
 }
 
+void checkcheck() {
+    for (int i = 39; i >= 35; i--) {
+        for (int j = 0; j < 20; j++) {
+            if (gamePole[i][j] == 'O' ||
+                gamePole[i][j] == 'T' ||
+                gamePole[i][j] == 'J' ||
+                gamePole[i][j] == 'L' ||
+                gamePole[i][j] == 'Z' ||
+                gamePole[i][j] == 'S' ||
+                gamePole[i][j] == 'I')
+            {
+                gamePole[i][j] = 'X';
+            }
+        }
+    }
+}
+
+bool checkPolePoint() {
+    for (int i = 0; i < 40; i++) {
+        for (int j = 0; j < 20; j++) {
+            if ((gamePole[i][j] == 'O' ||
+                gamePole[i][j] == 'T' ||
+                gamePole[i][j] == 'J' ||
+                gamePole[i][j] == 'L' ||
+                gamePole[i][j] == 'Z' ||
+                gamePole[i][j] == 'S' ||
+                gamePole[i][j] == 'I')&&(gamePole[i+1][j]=='X'))
+            {
+                return true;
+                break;
+            }
+        }
+    }
+    return false;
+}
+
 bool checkPole() {
     for (int j = 0; j < 20; j++) {
-        if (gamePole[39][j] == 'O' ||
+        if ((gamePole[39][j] == 'O' ||
             gamePole[39][j] == 'T' ||
             gamePole[39][j] == 'J' ||
             gamePole[39][j] == 'L' ||
             gamePole[39][j] == 'Z' ||
             gamePole[39][j] == 'S' ||
-            gamePole[39][j] == 'I') {
-            return true;
-            break;
+            gamePole[39][j] == 'I'))
+        {
+            checkcheck();
+            if (checkPolePoint()) {
+                return true;
+                break;
+            }
         }
     }
     return false;
@@ -287,11 +358,26 @@ Figure presKey(char k,Figure fig) {
 }
 
 void outGamePole() {
+    _COORD XY{ 0, 0 };
+    HANDLE A = GetStdHandle(STD_OUTPUT_HANDLE);
     for (int i = 0; i < 40; i++) {
+        XY.Y = i;
         for (int j = 0; j < 20; j++) {
+            XY.X = j;
+            SetConsoleCursorPosition(A, XY);
+            if (gamePoleMemory[i][j] == 'I' ||
+                gamePoleMemory[i][j] == 'J' ||
+                gamePoleMemory[i][j] == 'L' ||
+                gamePoleMemory[i][j] == 'O' ||
+                gamePoleMemory[i][j] == 'S' ||
+                gamePoleMemory[i][j] == 'Z' ||
+                gamePoleMemory[i][j] == 'T'||
+                gamePoleMemory[i][j] == 'X')
+            {
+                gamePole[i][j] = 'X';
+            }
             cout << gamePole[i][j];
         }
-        cout << '\n';
     }
 }
 
@@ -423,10 +509,15 @@ int main()
     //system("color 02");
 
     windowPole();//Вызов функции окна игрового поля
-    while (true) {
-        Figure figure = randomFigureSpawn();
+    
+    zGamePole();
+    zGamePoleMemory();
 
-        zGamePole();
+    while (true) {
+
+        bool flag = true;
+
+        Figure figure = randomFigureSpawn();
 
         spawnFig(figure);
         //for (int i = 0; i < 40; i++) {
@@ -442,13 +533,15 @@ int main()
             cout << '\n';
         }*/
 
-        while (true) {
+        while (flag) {
             char key;
-            while (!_kbhit())
+            while (!_kbhit()&&flag)
             {
                 if (checkPole()) {
-                    cout << "DONE!";
-                    break;
+                    //cout << "DONE!";
+                    zGamePoleMemory();
+                    flag = false;
+                    //this_thread::sleep_for(chrono::milliseconds(100));
                 }
                 //else if(checkPoint()>0) {
                 //    editPole(checkPoint());
@@ -456,14 +549,14 @@ int main()
                 else {
                     figure = moveFigure(figure, "base");
                     outGamePole();
-                    this_thread::sleep_for(chrono::milliseconds(1000));
+                    this_thread::sleep_for(chrono::milliseconds(200));
                 }
             }
+            if (flag) {
+                key = _getch();
 
-            key = _getch();
-
-            figure = presKey(key, figure);
-
+                figure = presKey(key, figure);
+            }
         }
     }
 }
