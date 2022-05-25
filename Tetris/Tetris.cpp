@@ -14,6 +14,9 @@
 
 using namespace std;
 
+int timercount = 0;
+int speed = 1000;
+
 int counterRotate = 0;
 int counterRotatePre = counterRotate;
 
@@ -174,9 +177,9 @@ void spawnFig(Figure fig) {
     if (name == "J" && RP == 1) {
         //SetConsoleTextAttribute(handle, rand() % 14 + 1);
         gamePole[X][Y] = 'J';
-        gamePole[X + 1][Y] = 'J';
-        gamePole[X][Y + 1] = 'J';
-        gamePole[X][Y + 2] = 'J';
+        gamePole[X][Y - 1] = 'J';
+        gamePole[X][Y - 2] = 'J';
+        gamePole[X-1][Y - 2] = 'J';
         //SetConsoleTextAttribute(handle, 15);
     }
     if (name == "J" && RP == 2) {
@@ -316,6 +319,50 @@ Figure presKey(char k,Figure fig) {
     return fig;
 }
 
+int checkPointLine() {
+
+    for (int i = 39; i >= 0; i--) {
+        
+        int c = 0;
+        
+        for (int j = 19; j >= 0; j--) {
+            if (gamePole[i][j] == 'X') {
+                c++;
+            }
+        }
+
+        if (c == 20) {
+            return i;
+        }
+
+    }
+    return -1;
+}
+
+void movePoleLine() {
+
+    int k = checkPointLine();
+    int c = 0;
+
+    if (k != -1) {
+
+        for (int j = 0; j < 20; j++) {
+            gamePole[k][j] = '.';
+        }
+
+        for (int i = k; i >= 0; i--) {
+            for (int j = 0; j < 20; j++) {
+                
+                gamePole[i][j] = gamePole[i - 1][j];
+                gamePole[i - 1][j] = '.';
+            
+            }
+        }
+
+
+    }
+}
+
 void outGamePole() {
     _COORD XY{ 0, 0 };
     HANDLE A = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -343,6 +390,14 @@ void outGamePole() {
 int main()
 {
 
+    setlocale(LC_ALL, "");
+
+    cout << "W - Вращение\n" << "A - Влево\n" << "D - Вправо\n";
+
+    this_thread::sleep_for(chrono::seconds(5));
+
+    system("cls");
+
     windowPole();//Вызов функции окна игрового поля
     
     zGamePole();
@@ -360,19 +415,27 @@ int main()
             char key;
             while (!_kbhit()&&flag)
             {
+
+                if (checkPointLine() != -1) {
+                    movePoleLine();
+                }
+
                 if (checkPole()) {
                     //cout << "DONE!";
                     zGamePoleMemory();
                     flag = false;
                     //this_thread::sleep_for(chrono::milliseconds(100));
                 }
-                //else if(checkPoint()>0) {
-                //    editPole(checkPoint());
-                //}
+
                 else {
                     figure = moveFigure(figure, "base");
                     outGamePole();
-                    this_thread::sleep_for(chrono::milliseconds(200));
+                    this_thread::sleep_for(chrono::milliseconds(speed));
+                    timercount++;
+                    if (timercount == 80) {
+                        speed -= 100;
+                        timercount = 0;
+                    }
                 }
             }
             if (flag) {
