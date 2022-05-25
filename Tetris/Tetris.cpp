@@ -57,9 +57,6 @@ void zGamePole() {
 
     for (int i = 0; i < 40; i++) {
         for (int j = 0; j < 20; j++) {
-            //if (!checkGamePole) {
-            //    gamePole[i][j]='.';
-            //}
             gamePole[i][j] = '.';
         }
     }
@@ -280,29 +277,6 @@ bool checkPole() {
     return false;
 }
 
-int checkPoint() {
-
-    int checkCount = 0;
-
-    for (int i = 39; i >= 0; i--) {
-        checkCount = 0;
-        for (int j = 0; j < 20; j++) {
-            if (gamePole[i][j]!='.') {
-                checkCount++;
-            }
-        }
-        if (checkCount == 20) {
-            return i;
-            break;
-        }
-        if (checkCount == 0) {
-            return 50;
-            break;
-        }
-    }
-    return 0;
-}
-
 Figure moveFigure(Figure fig,string name) {
     if (name == "base") {
         fig.cordX++;
@@ -321,24 +295,6 @@ Figure moveFigure(Figure fig,string name) {
     }
     return fig;
 }
-
-//void moveFigure() {
-//    for (int i = 39; i >= 0; i--) {
-//        for (int j = 19; j >= 0; j--) {
-//            if (gamePole[i][j] == 'O' ||
-//                gamePole[i][j] == 'T' ||
-//                gamePole[i][j] == 'J' ||
-//                gamePole[i][j] == 'L' ||
-//                gamePole[i][j] == 'Z' ||
-//                gamePole[i][j] == 'S' ||
-//                gamePole[i][j] == 'I') 
-//            {
-//                gamePole[i + 1][j] = gamePole[i][j];
-//                gamePole[i][j] = '.';
-//            }
-//        }
-//    }
-//}
 
 Figure presKey(char k,Figure fig) {
 
@@ -381,132 +337,8 @@ void outGamePole() {
     }
 }
 
-void editPole(int I) {
-    for (int j = 19; j >= 0; j--) {
-        gamePole[checkPoint()][j] = '.';
-    }
-    while (checkPoint() != 50) {
-        for (int i = 39; i >= 0; i--) {
-            for (int j = 19; j >= 0; j--) {
-                if ((gamePole[i][j] == 'O' ||
-                    gamePole[i][j] == 'T' ||
-                    gamePole[i][j] == 'J' ||
-                    gamePole[i][j] == 'L' ||
-                    gamePole[i][j] == 'Z' ||
-                    gamePole[i][j] == 'S' ||
-                    gamePole[i][j] == 'I')&&(i<39)) 
-                {
-                    gamePole[i + 1][j] = gamePole[i][j];
-                    gamePole[i][j] = '.';
-                }
-            }
-        }
-    }
-}
-
-//void rotateFigure(Figure fig,int i) {
-//
-//    if (fig.rotatePos >= 4) {
-//        fig.rotatePos = 0;
-//    }
-//
-//    string name = fig.nameFigure;
-//    
-//    int X = fig.cordX;
-//    int Y = fig.cordY;
-//
-//    if ((name == "O")) {
-//        //SetConsoleTextAttribute(handle,rand()%14+1);
-//        gamePole[X][Y] = 'O';
-//        gamePole[X][Y + 1] = 'O';
-//        gamePole[X + 1][Y] = 'O';
-//        gamePole[X + 1][Y + 1] = 'O';
-//        //SetConsoleTextAttribute(handle, 15);
-//    }
-//    if (name == "I"&&(fig.rotatePos==1||fig.rotatePos==3)) {
-//        //SetConsoleTextAttribute(handle, rand() % 14 + 1);
-//        gamePole[X][Y] = 'I';
-//        gamePole[X][Y+1] = 'I';
-//        gamePole[X][Y+2] = 'I';
-//        gamePole[X][Y-1] = 'I';
-//        //SetConsoleTextAttribute(handle, 15);
-//    }
-//    if (name == "S") {
-//        //SetConsoleTextAttribute(handle, rand() % 14 + 1);
-//        gamePole[X][Y] = 'S';
-//        gamePole[X+1][Y] = 'S';
-//        gamePole[X + 1][Y+1] = 'S';
-//        gamePole[X + 2][Y + 1] = 'S';
-//        //SetConsoleTextAttribute(handle, 15);
-//    }
-//    if (name == "Z") {
-//        //SetConsoleTextAttribute(handle, rand() % 14 + 1);
-//        gamePole[X][Y] = 'Z';
-//        gamePole[X+1][Y] = 'Z';
-//        gamePole[X + 1][Y-1] = 'Z';
-//        gamePole[X + 2][Y - 1] = 'Z';
-//        //SetConsoleTextAttribute(handle, 15);
-//    }
-//    if (name == "L") {
-//        //SetConsoleTextAttribute(handle, rand() % 14 + 1);
-//        gamePole[X][Y] = 'L';
-//        gamePole[X + 1][Y] = 'L';
-//        gamePole[X][Y+1] = 'L';
-//        gamePole[X][Y + 2] = 'L';
-//        
-//        //gamePole[X][Y] = 'L';
-//        //gamePole[X][Y-1] = 'L';
-//        //gamePole[X+1][Y] = 'L';
-//        //gamePole[X+2][Y] = 'L';
-//
-//        //gamePole[X][Y] = 'L';
-//        //gamePole[X + 1][Y] = 'L';
-//        //gamePole[X][Y - 1] = 'L';
-//        //gamePole[X][Y - 2] = 'L';
-//        //SetConsoleTextAttribute(handle, 15);
-//    }
-//    if (name == "J") {
-//        //SetConsoleTextAttribute(handle, rand() % 14 + 1);
-//        gamePole[X][Y] = 'J';
-//        gamePole[X + 1][Y] = 'J';
-//        gamePole[X][Y+1] = 'J';
-//        gamePole[X][Y + 2] = 'J';
-//
-//        //gamePole[X][Y] = 'J';
-//        //gamePole[X][Y+1] = 'J';
-//        //gamePole[X+1][Y] = 'J';
-//        //gamePole[X+2][Y] = 'J';
-//
-//        //gamePole[X][Y] = 'J';
-//        //gamePole[X+1][Y] = 'J';
-//        //gamePole[X][Y - 1] = 'J';
-//        //gamePole[X][Y - 2] = 'J';
-//
-//        //SetConsoleTextAttribute(handle, 15);
-//    }
-//    if (name == "T") {
-//        //SetConsoleTextAttribute(handle, rand() % 14 + 1);
-//        gamePole[X][Y] = 'T';
-//        gamePole[X + 1][Y] = 'T';
-//        gamePole[X - 1][Y] = 'T';
-//        gamePole[X][Y + 1] = 'T';
-//
-//        //gamePole[X][Y] = 'T';
-//        //gamePole[X][Y+1] = 'T';
-//        //gamePole[X][Y - 1] = 'T';
-//        //gamePole[X + 1][Y] = 'T';
-//
-//        //gamePole[X][Y] = 'T';
-//        //gamePole[X + 1][Y] = 'T';
-//        //gamePole[X - 1][Y] = 'T';
-//        //gamePole[X][Y - 1] = 'T';
-//        //SetConsoleTextAttribute(handle, 15);
-//    }
-//}
-
 int main()
 {
-    //system("color 02");
 
     windowPole();//Вызов функции окна игрового поля
     
@@ -520,18 +352,6 @@ int main()
         Figure figure = randomFigureSpawn();
 
         spawnFig(figure);
-        //for (int i = 0; i < 40; i++) {
-        //    for (int j = 0; j < 20; j++) {
-        //        cout << gamePole[i][j];
-        //    }
-        //    cout << '\n';
-        //}
-        /*for (int i = 0; i < 40; i++) {
-            for (int j = 0; j < 20; j++) {
-                cout << gamePole[i][j];
-            }
-            cout << '\n';
-        }*/
 
         while (flag) {
             char key;
